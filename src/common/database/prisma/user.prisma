@@ -1,0 +1,65 @@
+enum UserType {
+   USER
+   MODERATOR
+}
+
+enum Permission {
+    GUEST
+    PREMIUM
+    WORKER
+    ADMIN
+    SUPER_ADMIN
+}
+
+model User {
+    id       Int    @id @default(autoincrement())
+    name     String
+    email    String @unique
+    password String
+
+    userType UserType @default(USER)
+    permission Permission @default(GUEST)
+
+    employee Employee?
+
+    phone String?
+    address String?
+
+    wishlist Wishlist[]
+    orders Order[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Employee {
+    id Int @id @default(autoincrement())
+
+    userId Int @unique
+    user User @relation(fields: [userId], references: [id])
+
+    branchId Int
+    branch Branch @relation(fields: [branchId], references: [id])
+}
+
+model Wishlist {
+    id Int @id @default(autoincrement())
+
+    userId Int
+    user User @relation(fields: [userId], references: [id])
+
+    items WishlistItem[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model WishlistItem {
+    id          Int       @id @default(autoincrement())
+    wishlistId  Int
+    wishlist    Wishlist  @relation(fields: [wishlistId], references: [id])
+    productId   Int
+    product     Medicine  @relation(fields: [productId], references: [id])
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+}

@@ -1,0 +1,59 @@
+model Medicine {
+    id Int @id @default(autoincrement())
+    name String
+    price Float
+    description String
+    quantity Int
+
+    therapeuticActionId Int
+    therapeuticAction TherapeuticAction @relation(fields: [therapeuticActionId], references: [id])
+
+    presentationId Int
+    presentation Presentation @relation(fields: [presentationId], references: [id])
+
+    mainComponentId Int
+    mainComponent MainComponent @relation(fields: [mainComponentId], references: [id])
+
+    laboratoryId Int
+    laboratory Laboratory @relation(fields: [laboratoryId], references: [id])
+
+    branches BranchMedicine[]
+    orders OrderItem[]
+    wishlistItems WishlistItem[]
+    
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model TherapeuticAction {
+    id Int @id @default(autoincrement())
+    name String
+    description String
+
+    medicines Medicine[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Presentation {
+    id Int @id @default(autoincrement())
+    name String
+    description String
+
+    medicines Medicine[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model MainComponent {
+    id Int @id @default(autoincrement())
+    name String
+    description String
+
+    medicines Medicine[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
