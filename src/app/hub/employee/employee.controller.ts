@@ -14,22 +14,22 @@ export class EmployeeController {
   }
 
   @Get()
-  findAll(@Query() paginationDto: PaginationDto) {
-    return this.employeeService.findAll(paginationDto);
+  async findAll(@Query() paginationDto: PaginationDto) {
+    return await this.employeeService.findAll(paginationDto);
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.employeeService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.employeeService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateEmployeeDto: UpdateEmployeeDto) {
-    return this.employeeService.update(+id, updateEmployeeDto);
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateEmployeeDto: UpdateEmployeeDto) {
+    return await this.employeeService.update(+id, updateEmployeeDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.employeeService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.employeeService.remove(id);
   }
 }
