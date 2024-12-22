@@ -1,26 +1,80 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
+import { PrismaService } from 'src/common/database/prisma.service';
+import { PaginationDto } from 'src/common/database/dto/pagination.dto';
+import { Position } from '@prisma/client';
 
 @Injectable()
 export class PositionService {
-  create(createPositionDto: CreatePositionDto) {
-    return 'This action adds a new position';
+  constructor(
+    private prismaService: PrismaService,
+  ) {}
+
+  async create(createPositionDto: CreatePositionDto) : Promise<Position> {
+    try {
+      return await this.prismaService.position.create({
+        data: {
+          description: createPositionDto.description,
+          name: createPositionDto.name
+        }
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  findAll() {
-    return `This action returns all position`;
+  async findAll(paginationDto: PaginationDto) : Promise<Position[]> {
+    const skip = paginationDto.skip;
+    const take = paginationDto.limit;
+    
+    try {
+      return await this.prismaService.position.findMany({
+        skip,
+        take,
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} position`;
+  async findOne(id: number) : Promise<Position> {
+    try {
+      return await this.prismaService.position.findUnique({
+        where: {
+          id: id
+        }
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  update(id: number, updatePositionDto: UpdatePositionDto) {
-    return `This action updates a #${id} position`;
+  async update(id: number, updatePositionDto: UpdatePositionDto) {
+    try {
+      return await this.prismaService.position.update({
+        where: {
+          id: id
+        },
+        data: {
+          description: updatePositionDto.description,
+          name: updatePositionDto.name
+        }
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} position`;
+  async remove(id: number) {
+    try {
+      return await this.prismaService.position.delete({
+        where: {
+          id: id
+        }
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }
