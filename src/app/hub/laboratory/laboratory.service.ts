@@ -27,19 +27,61 @@ export class LaboratoryService {
     }
   }
 
-  findAll(paginationDto: PaginationDto) {
-    
+  async findAll(paginationDto: PaginationDto) {
+    try {
+      const skip = paginationDto.skip;
+      const take = paginationDto.limit;
+
+      return await this.prismaService.laboratory.findMany({
+        skip,
+        take,
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} laboratory`;
+  async findOne(id: number) {
+    try {
+      return await this.prismaService.laboratory.findUnique({
+        where: {
+          id
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
-  update(id: number, updateLaboratoryDto: UpdateLaboratoryDto) {
-    return `This action updates a #${id} laboratory`;
+  async update(id: number, updateLaboratoryDto: UpdateLaboratoryDto) {
+    try {
+      const { address, email, name, phone} = updateLaboratoryDto;
+
+      return await this.prismaService.laboratory.update({
+        where: {
+          id
+        },
+        data: {
+          address, 
+          email,
+          name,
+          phone,
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} laboratory`;
+  async remove(id: number) {
+    try {
+      return await this.prismaService.laboratory.delete({
+        where: {
+          id
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 }

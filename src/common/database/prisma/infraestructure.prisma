@@ -15,7 +15,7 @@ model Branch {
 
 model Laboratory {
     id Int @id @default(autoincrement())
-    name String
+    name String @unique
     address String
     phone String
     email String
