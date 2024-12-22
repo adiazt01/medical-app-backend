@@ -18,7 +18,7 @@ export class CreateEmployeeDto {
     lastName: string;
   
     @IsDateString()
-    startDate: string;
+    startDate: string = new Date().toISOString();
   
     @IsOptional()
     @IsDateString()

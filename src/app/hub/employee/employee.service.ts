@@ -8,10 +8,10 @@ import { PaginationDto } from 'src/common/database/dto/pagination.dto';
 export class EmployeeService {
   constructor(private prismaService: PrismaService) { }
 
-  create(createEmployeeDto: CreateEmployeeDto,
+  async create(createEmployeeDto: CreateEmployeeDto,
   ) {
     try {
-      return this.prismaService.employee.create({
+      return await this.prismaService.employee.create({
         data: {
           firstName: createEmployeeDto.firstName,
           lastName: createEmployeeDto.lastName,
@@ -38,12 +38,12 @@ export class EmployeeService {
     }
   }
 
-  findAll(paginationDto: PaginationDto) {
+  async findAll(paginationDto: PaginationDto) {
     const skip = paginationDto.skip;
     const take = paginationDto.limit;
     
     try {
-      return this.prismaService.employee.findMany({
+      return await this.prismaService.employee.findMany({
         skip,
         take,
         include: {
@@ -57,9 +57,9 @@ export class EmployeeService {
     }
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     try {
-      return this.prismaService.employee.findUnique({
+      return await this.prismaService.employee.findUnique({
         where: {
           id: id,
         },
@@ -74,9 +74,9 @@ export class EmployeeService {
     }
   }
 
-  update(id: number, updateEmployeeDto: UpdateEmployeeDto) {
+  async update(id: number, updateEmployeeDto: UpdateEmployeeDto) {
     try {
-      return this.prismaService.employee.update({
+      return await this.prismaService.employee.update({
         where: {
           id: id,
         },
@@ -108,9 +108,9 @@ export class EmployeeService {
     }
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     try {
-      return this.prismaService.employee.delete({
+      return await this.prismaService.employee.delete({
         where: {
           id: id,
         },
