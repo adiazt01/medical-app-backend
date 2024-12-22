@@ -4,6 +4,7 @@ model Medicine {
     price Float
     description String
     quantity Int
+    urlImage String
 
     therapeuticActionId Int
     therapeuticAction TherapeuticAction @relation(fields: [therapeuticActionId], references: [id])
