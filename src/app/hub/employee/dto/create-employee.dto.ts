@@ -2,6 +2,7 @@ import { IsDateString, IsInt, IsOptional, IsString } from "class-validator";
 
 export class CreateEmployeeDto {
     @IsInt()
+    @IsOptional()
     userId: number;
   
     @IsInt()

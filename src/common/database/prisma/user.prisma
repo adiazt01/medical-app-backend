@@ -1,6 +1,6 @@
 enum UserType {
-   USER
-   MODERATOR
+    USER
+    MODERATOR
 }
 
 enum Permission {
@@ -17,7 +17,7 @@ model User {
     email    String @unique
     password String
 
-    userType UserType @default(USER)
+    userType   UserType   @default(USER)
     permission Permission @default(GUEST)
 
     employee Employee?
@@ -30,21 +30,21 @@ model User {
 }
 
 model Employee {
-    id Int @id @default(autoincrement())
+    id        Int    @id @default(autoincrement())
     firstName String
-    lastName String
+    lastName  String
 
-    userId Int @unique
-    user User @relation(fields: [userId], references: [id])
+    userId Int?  @unique
+    user   User? @relation(fields: [userId], references: [id])
 
     branchId Int
-    branch Branch @relation(fields: [branchId], references: [id])
+    branch   Branch @relation(fields: [branchId], references: [id])
 
     positionId Int
-    position Position @relation(fields: [positionId], references: [id])
+    position   Position @relation(fields: [positionId], references: [id])
 
     startDate DateTime
-    endDate DateTime?
+    endDate   DateTime?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -54,23 +54,23 @@ model Costumer {
     id Int @id @default(autoincrement())
 
     firstName String
-    lastName String
+    lastName  String
 
-    phone String
+    phone   String
     address String
 
-    userId Int @unique
-    user User @relation(fields: [userId], references: [id])
+    userId Int  @unique
+    user   User @relation(fields: [userId], references: [id])
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
 
 model Position {
-    id Int @id @default(autoincrement())
-    name String
+    id          Int        @id @default(autoincrement())
+    name        String
     description String
-    employees Employee[]
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    employees   Employee[]
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
 }

@@ -26,11 +26,11 @@ export class EmployeeService {
               id: createEmployeeDto.positionId
             },
           },
-          user: {
-            connect: {
-              id: createEmployeeDto.userId
+          ...(createEmployeeDto.userId && {
+            user: {
+              connect: { id: createEmployeeDto.userId },
             },
-          },
+          }),
         },
       });
     } catch (error) {
