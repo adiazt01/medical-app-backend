@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe } from '@nestjs/common';
 import { MainComponentService } from './main-component.service';
 import { CreateMainComponentDto } from './dto/create-main-component.dto';
 import { UpdateMainComponentDto } from './dto/update-main-component.dto';
+import { PaginationDto } from 'src/common/database/dto/pagination.dto';
 
-@Controller('main-component')
+@Controller('hub/main-component')
 export class MainComponentController {
   constructor(private readonly mainComponentService: MainComponentService) {}
 
@@ -13,22 +14,22 @@ export class MainComponentController {
   }
 
   @Get()
-  findAll() {
-    return this.mainComponentService.findAll();
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.mainComponentService.findAll(paginationDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.mainComponentService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.mainComponentService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMainComponentDto: UpdateMainComponentDto) {
-    return this.mainComponentService.update(+id, updateMainComponentDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateMainComponentDto: UpdateMainComponentDto) {
+    return this.mainComponentService.update(id, updateMainComponentDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.mainComponentService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.mainComponentService.remove(id);
   }
 }

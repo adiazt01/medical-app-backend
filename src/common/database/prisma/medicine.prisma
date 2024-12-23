@@ -28,7 +28,7 @@ model Medicine {
 model TherapeuticAction {
     id Int @id @default(autoincrement())
     name String
-    description String
+    description String?
 
     medicines Medicine[]
 
@@ -39,7 +39,7 @@ model TherapeuticAction {
 model Presentation {
     id Int @id @default(autoincrement())
     name String
-    description String
+    description String?
 
     medicines Medicine[]
 
@@ -50,7 +50,7 @@ model Presentation {
 model MainComponent {
     id Int @id @default(autoincrement())
     name String
-    description String
+    description String?
 
     medicines Medicine[]
 
