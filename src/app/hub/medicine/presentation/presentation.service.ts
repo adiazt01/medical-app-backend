@@ -1,26 +1,77 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePresentationDto } from './dto/create-presentation.dto';
 import { UpdatePresentationDto } from './dto/update-presentation.dto';
+import { PrismaService } from 'src/common/database/prisma.service';
+import { PaginationDto } from 'src/common/database/dto/pagination.dto';
 
 @Injectable()
 export class PresentationService {
-  create(createPresentationDto: CreatePresentationDto) {
-    return 'This action adds a new presentation';
+  constructor(private prisma: PrismaService) {}
+  
+  async create(createPresentationDto: CreatePresentationDto) {
+   try {
+    return await this.prisma.presentation.create({
+      data: {
+        name: createPresentationDto.name,
+        description: createPresentationDto.description
+      }
+    });
+   } catch (error) {
+      throw new Error(error);
+   }
   }
 
-  findAll() {
-    return `This action returns all presentation`;
+  async findAll(paginationDto: PaginationDto) {
+    try {
+      const limit = paginationDto.limit;
+    const skip = paginationDto.skip;
+
+    return await this.prisma.presentation.findMany({
+      take: limit,
+      skip: skip
+    });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} presentation`;
+  async findOne(id: number) {
+    try {
+      return await this.prisma.presentation.findUnique({
+      where: {
+        id: id
+      }
+    });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  update(id: number, updatePresentationDto: UpdatePresentationDto) {
-    return `This action updates a #${id} presentation`;
+  async update(id: number, updatePresentationDto: UpdatePresentationDto) {
+    try {
+      return await this.prisma.presentation.update({
+      where: {
+        id: id
+      },
+      data: {
+        name: updatePresentationDto.name,
+        description: updatePresentationDto.description
+      }
+    });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} presentation`;
+  async remove(id: number) {
+    try {
+      return await this.prisma.presentation.delete({
+      where: {
+        id: id
+      }
+    });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }
