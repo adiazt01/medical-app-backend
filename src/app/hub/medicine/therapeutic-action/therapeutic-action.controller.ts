@@ -4,7 +4,7 @@ import { CreateTherapeuticActionDto } from './dto/create-therapeutic-action.dto'
 import { UpdateTherapeuticActionDto } from './dto/update-therapeutic-action.dto';
 import { PaginationDto } from 'src/common/database/dto/pagination.dto';
 
-@Controller('therapeutic-action')
+@Controller('hub/therapeutic-action')
 export class TherapeuticActionController {
   constructor(private readonly therapeuticActionService: TherapeuticActionService) {}
 
