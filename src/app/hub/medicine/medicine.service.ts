@@ -61,7 +61,8 @@ export class MedicineService {
           laboratory: true,
           mainComponent: true,
           presentation: true,
-          therapeuticAction: true
+          therapeuticAction: true,
+          file: true
         }
       })
     } catch (error) {
@@ -79,7 +80,8 @@ export class MedicineService {
           laboratory: true,
           mainComponent: true,
           presentation: true,
-          therapeuticAction: true
+          therapeuticAction: true,
+          file: true
         }
       })
     } catch (error) {

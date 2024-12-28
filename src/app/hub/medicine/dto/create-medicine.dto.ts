@@ -8,9 +8,6 @@ export class CreateMedicineDto {
     @IsString()
     description: string;
 
-    @IsString()
-    urlImage: string;
-
     @IsNumber()
     price: number;
 
