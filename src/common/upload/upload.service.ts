@@ -14,6 +14,7 @@ export class UploadService {
 
   async uploadImage(
     file: Express.Multer.File,
+    nameFile: string,
     folder: string,
     options?: {
       cacheControl?: string;
@@ -23,11 +24,23 @@ export class UploadService {
   ) {
     const { data, error } = await this.supabase.storage
       .from('bucket')
-      .upload(`${folder}/${file.originalname}`, file.buffer, {
+      .upload(`${folder}/${nameFile}`, file.buffer, {
         cacheControl: options?.cacheControl || '3600',
         contentType: options?.contentType || file.mimetype,
         upsert: options?.upsert || false,
       });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data;
+  }
+
+  async deleteImage(nameFile: string, folder: string) {
+    const { data, error } = await this.supabase.storage
+      .from('bucket')
+      .remove([`${folder}/${nameFile}`]);
 
     if (error) {
       throw new Error(error.message);

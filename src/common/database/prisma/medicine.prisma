@@ -2,9 +2,10 @@ model Medicine {
     id Int @id @default(autoincrement())
     name String
     price Float
-    description String
-    quantity Int
-    urlImage String
+    description String?
+
+    fileId Int
+    file File @relation(fields: [fileId], references: [id], onDelete: Cascade)
 
     therapeuticActionId Int
     therapeuticAction TherapeuticAction @relation(fields: [therapeuticActionId], references: [id])

@@ -7,3 +7,17 @@ generator client {
   provider = "prisma-client-js"
   previewFeatures = ["prismaSchemaFolder"]
 }
+
+model File {
+  id        Int      @id @default(autoincrement())
+  name      String
+  originalName String
+  path      String
+  fullPath  String
+  mimeType  String
+  uploadId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Medicine Medicine[]
+}

@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe } from '@nestjs/common';
 import { MedicineService } from './medicine.service';
 import { CreateMedicineDto } from './dto/create-medicine.dto';
 import { UpdateMedicineDto } from './dto/update-medicine.dto';
+import { PaginationDto } from '@/common/database/dto/pagination.dto';
 
-@Controller('medicine')
+@Controller('hub/medicine')
 export class MedicineController {
   constructor(private readonly medicineService: MedicineService) {}
 
@@ -13,22 +14,22 @@ export class MedicineController {
   }
 
   @Get()
-  findAll() {
-    return this.medicineService.findAll();
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.medicineService.findAll(paginationDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.medicineService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.medicineService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMedicineDto: UpdateMedicineDto) {
-    return this.medicineService.update(+id, updateMedicineDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateMedicineDto: UpdateMedicineDto) {
+    return this.medicineService.update(id, updateMedicineDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.medicineService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.medicineService.remove(id);
   }
 }

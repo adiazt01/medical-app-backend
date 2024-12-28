@@ -1,26 +1,143 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMedicineDto } from './dto/create-medicine.dto';
 import { UpdateMedicineDto } from './dto/update-medicine.dto';
+import { PrismaService } from '@/common/database/prisma.service';
+import { PaginationDto } from '@/common/database/dto/pagination.dto';
 
 @Injectable()
 export class MedicineService {
-  create(createMedicineDto: CreateMedicineDto) {
-    return 'This action adds a new medicine';
+  constructor(
+    private prismaService: PrismaService
+  ) { }
+
+  async create(createMedicineDto: CreateMedicineDto) {
+    try {
+      return await this.prismaService.medicine.create({
+        data: {
+          description: createMedicineDto.description,
+          name: createMedicineDto.name,
+          price: createMedicineDto.price,
+          file: {
+            connect: {
+              id: createMedicineDto.fileId
+            }
+          },
+          therapeuticAction: {
+            connect: {
+              id: createMedicineDto.therapeuticActionId
+            }
+          },
+          presentation: {
+            connect: {
+              id: createMedicineDto.presentationId
+            }
+          },
+          mainComponent: {
+            connect: {
+              id: createMedicineDto.mainComponentId
+            }
+          },
+          laboratory: {
+            connect: {
+              id: createMedicineDto.laboratoryId
+            }
+          }
+        }
+      })
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  findAll() {
-    return `This action returns all medicine`;
+  async findAll(paginationDto: PaginationDto) {
+    try {
+      const limit = paginationDto.limit;
+      const skip = paginationDto.skip;
+
+      return await this.prismaService.medicine.findMany({
+        take: limit,
+        skip: skip,
+        include: {
+          laboratory: true,
+          mainComponent: true,
+          presentation: true,
+          therapeuticAction: true
+        }
+      })
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} medicine`;
+  async findOne(id: number) {
+    try {
+      return await this.prismaService.medicine.findUnique({
+        where: {
+          id: id
+        },
+        include: {
+          laboratory: true,
+          mainComponent: true,
+          presentation: true,
+          therapeuticAction: true
+        }
+      })
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  update(id: number, updateMedicineDto: UpdateMedicineDto) {
-    return `This action updates a #${id} medicine`;
+  async update(id: number, updateMedicineDto: UpdateMedicineDto) {
+    try {
+      return await this.prismaService.medicine.update({
+        where: {
+          id: id
+        },
+        data: {
+          description: updateMedicineDto.description,
+          name: updateMedicineDto.name,
+          price: updateMedicineDto.price,
+          file: {
+            connect: {
+              id: updateMedicineDto.fileId
+            }
+          },
+          therapeuticAction: {
+            connect: {
+              id: updateMedicineDto.therapeuticActionId
+            }
+          },
+          presentation: {
+            connect: {
+              id: updateMedicineDto.presentationId
+            }
+          },
+          mainComponent: {
+            connect: {
+              id: updateMedicineDto.mainComponentId
+            }
+          },
+          laboratory: {
+            connect: {
+              id: updateMedicineDto.laboratoryId
+            }
+          }
+        }
+      })
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} medicine`;
+  async remove(id: number) {
+    try {
+      return await this.prismaService.medicine.delete({
+        where: {
+          id: id
+        }
+      })
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }
