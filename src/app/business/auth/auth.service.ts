@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 
@@ -10,21 +9,22 @@ export class AuthService {
   ) {}
   
   async create() {
-    console.log('Sending email...');
-    return await this.mailerService
-    .sendMail({
-      to: 'armandodt2004@gmail.com', // list of receivers
-      from: process.env.SMTP_FROM, // sender address
-      subject: 'Testing Nest MailerModule ✔', // Subject line
-      text: 'welcome', // plaintext body
-      html: '<b>welcome</b>', // HTML body content
-    })
-    .then(() => {
-      console.log('Email sent');
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    })
+    // console.log('Sending email...');
+    // return await this.mailerService
+    // .sendMail({
+    //   to: 'armandodt2004@gmail.com', // list of receivers
+    //   from: process.env.SMTP_FROM, // sender address
+    //   subject: 'Testing Nest MailerModule ✔', // Subject line
+    //   text: 'welcome', // plaintext body
+    //   html: '<b>welcome</b>', // HTML body content
+    // })
+    // .then(() => {
+    //   console.log('Email sent');
+    // })
+    // .catch((error) => {
+    //   console.error('Error:', error);
+    // })
+    
   }
 
   findAll() {

@@ -6,10 +6,11 @@ import { TherapeuticActionModule } from './therapeutic-action/therapeutic-action
 import { MainComponentModule } from './main-component/main-component.module';
 import { PrismaService } from '@/common/database/prisma.service';
 import { DatabaseModule } from '@/common/database/database.module';
+import { UploadService } from '@/common/upload/upload.service';
 
 @Module({
   controllers: [MedicineController],
-  providers: [MedicineService, PrismaService],
+  providers: [MedicineService, PrismaService, UploadService],
   imports: [PresentationModule, TherapeuticActionModule, MainComponentModule, DatabaseModule],
 })
 export class MedicineModule {}

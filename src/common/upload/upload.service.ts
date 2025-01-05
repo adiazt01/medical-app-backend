@@ -37,6 +37,14 @@ export class UploadService {
     return data;
   }
 
+  async getImage(nameFileWithFolder: string) {
+    const { data } = this.supabase.storage
+      .from('bucket')
+      .getPublicUrl(nameFileWithFolder);
+
+    return data;
+  }
+
   async deleteImage(nameFile: string, folder: string) {
     const { data, error } = await this.supabase.storage
       .from('bucket')

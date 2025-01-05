@@ -3,11 +3,13 @@ import { CreateMedicineDto } from './dto/create-medicine.dto';
 import { UpdateMedicineDto } from './dto/update-medicine.dto';
 import { PrismaService } from '@/common/database/prisma.service';
 import { PaginationDto } from '@/common/database/dto/pagination.dto';
+import { UploadService } from '@/common/upload/upload.service';
 
 @Injectable()
 export class MedicineService {
   constructor(
-    private prismaService: PrismaService
+    private prismaService: PrismaService,
+    private uploadService: UploadService
   ) { }
 
   async create(createMedicineDto: CreateMedicineDto) {
@@ -53,8 +55,8 @@ export class MedicineService {
     try {
       const limit = paginationDto.limit;
       const skip = paginationDto.skip;
-
-      return await this.prismaService.medicine.findMany({
+ 
+      const data = await this.prismaService.medicine.findMany({
         take: limit,
         skip: skip,
         include: {
@@ -65,6 +67,16 @@ export class MedicineService {
           file: true
         }
       })
+
+      const dataWithImage = await Promise.all(data.map(async (medicine) => {
+        const imgUrl = await this.uploadService.getImage(medicine.file.path);
+        console.log(imgUrl);
+        (medicine.file as any).url = imgUrl;
+        return medicine;
+      }))
+
+
+      return dataWithImage;
     } catch (error) {
       throw new Error(error);
     }
@@ -136,7 +148,7 @@ export class MedicineService {
       return await this.prismaService.medicine.delete({
         where: {
           id: id
-        }
+        },
       })
     } catch (error) {
       throw new Error(error);

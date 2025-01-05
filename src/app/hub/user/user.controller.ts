@@ -1,8 +1,10 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from "@nestjs/common";
+import { Controller, Get, Param, ParseIntPipe, Query, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { PaginationDto } from "src/common/database/dto/pagination.dto";
+import { AuthHubGuard } from "../auth/auth-hub/auth-hub.guard";
 
 @Controller('hub/user')
+@UseGuards(AuthHubGuard)
 export class UserController {
   constructor(
     private readonly userService: UserService,
