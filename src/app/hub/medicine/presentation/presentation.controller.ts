@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { PresentationService } from './presentation.service';
 import { CreatePresentationDto } from './dto/create-presentation.dto';
 import { UpdatePresentationDto } from './dto/update-presentation.dto';
 import { PaginationDto } from 'src/common/database/dto/pagination.dto';
+import { AuthHubGuard } from '../../auth/auth-hub/auth-hub.guard';
 
-@Controller('hub/presentation')
+@UseGuards(AuthHubGuard)
+@Controller('hub/presentations')
 export class PresentationController {
   constructor(private readonly presentationService: PresentationService) {}
 

@@ -71,7 +71,7 @@ export class MedicineService {
       const dataWithImage = await Promise.all(data.map(async (medicine) => {
         const imgUrl = await this.uploadService.getImage(medicine.file.path);
         console.log(imgUrl);
-        (medicine.file as any).url = imgUrl;
+        (medicine.file as any).url = imgUrl.publicUrl;
         return medicine;
       }))
 

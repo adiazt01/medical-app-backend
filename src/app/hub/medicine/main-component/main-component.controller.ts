@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { MainComponentService } from './main-component.service';
 import { CreateMainComponentDto } from './dto/create-main-component.dto';
 import { UpdateMainComponentDto } from './dto/update-main-component.dto';
 import { PaginationDto } from 'src/common/database/dto/pagination.dto';
+import { AuthHubGuard } from '../../auth/auth-hub/auth-hub.guard';
 
-@Controller('hub/main-component')
+@UseGuards(AuthHubGuard)
+@Controller('hub/main-components')
 export class MainComponentController {
   constructor(private readonly mainComponentService: MainComponentService) {}
 

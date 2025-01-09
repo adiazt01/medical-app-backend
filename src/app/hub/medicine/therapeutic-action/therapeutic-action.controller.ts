@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { TherapeuticActionService } from './therapeutic-action.service';
 import { CreateTherapeuticActionDto } from './dto/create-therapeutic-action.dto';
 import { UpdateTherapeuticActionDto } from './dto/update-therapeutic-action.dto';
 import { PaginationDto } from 'src/common/database/dto/pagination.dto';
+import { AuthHubGuard } from '../../auth/auth-hub/auth-hub.guard';
 
-@Controller('hub/therapeutic-action')
+@UseGuards(AuthHubGuard)
+@Controller('hub/therapeutic-actions')
 export class TherapeuticActionController {
   constructor(private readonly therapeuticActionService: TherapeuticActionService) {}
 
