@@ -4,6 +4,8 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UserLoginDto } from './dto/user-login.dto';
 import { UserRegisterDto } from './dto/user-register.dto';
+import * as dayjs from 'dayjs';
+import exp from 'constants';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +26,15 @@ export class AuthService {
             return new UnauthorizedException('Invalid email or password');
         }
 
-        const payload = { email: user.email, sub: user.id, permission: user.permission, userType: user.userType };
+        const payload = { 
+            email: user.email, 
+            sub: user.id, 
+            permission: user.permission, 
+            userType: user.userType,
+            iat: dayjs().unix(),
+            exp: dayjs().add(1, 'day').unix(),
+        };
+        
         return {
             access_token: this.jwtService.sign(payload),
         };
@@ -43,7 +53,13 @@ export class AuthService {
 
         const newUser = await this.userService.create({ email, password: hashedPassword, name });
         
-        const payload = { email: newUser.email, sub: newUser.id, permission: newUser.permission, userType: newUser.userType };
+        const payload = { 
+            email: newUser.email, sub: newUser.id, 
+            permission: newUser.permission, 
+            userType: newUser.userType,
+            iat: dayjs().unix(),
+            exp: dayjs().add(1, 'day').unix(),
+        };
         
         return {
             access_token: this.jwtService.sign(payload),
