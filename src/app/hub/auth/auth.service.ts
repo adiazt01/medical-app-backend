@@ -31,10 +31,8 @@ export class AuthService {
             sub: user.id, 
             permission: user.permission, 
             userType: user.userType,
-            iat: dayjs().unix(),
-            exp: dayjs().add(1, 'day').unix(),
         };
-        
+
         return {
             access_token: this.jwtService.sign(payload),
         };
@@ -56,9 +54,7 @@ export class AuthService {
         const payload = { 
             email: newUser.email, sub: newUser.id, 
             permission: newUser.permission, 
-            userType: newUser.userType,
-            iat: dayjs().unix(),
-            exp: dayjs().add(1, 'day').unix(),
+            userType: newUser.userType
         };
         
         return {
