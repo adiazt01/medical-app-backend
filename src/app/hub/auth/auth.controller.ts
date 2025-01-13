@@ -22,14 +22,6 @@ export class AuthController {
     async signUp(@Body() userRegisterDto: UserRegisterDto) {
         return this.authService.signUp(userRegisterDto);
     }
-    
-    @HttpCode(HttpStatus.OK)
-    @Get('me')
-    @RequirePermission(Permission.ADMIN)
-    @UseGuards(AuthHubGuard, PermissionGuard)
-    async me() {
-        return 'me';
-    }
 
     @HttpCode(HttpStatus.OK)
     @Get('logout')

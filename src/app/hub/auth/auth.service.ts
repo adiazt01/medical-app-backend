@@ -34,7 +34,9 @@ export class AuthService {
         };
 
         return {
-            access_token: this.jwtService.sign(payload),
+            access_token: this.jwtService.sign(payload, {
+                expiresIn: '1d'
+            }),
         };
     }
 
@@ -58,7 +60,9 @@ export class AuthService {
         };
         
         return {
-            access_token: this.jwtService.sign(payload),
+            access_token: this.jwtService.sign(payload, {
+                expiresIn: '1d'
+            }),
         };
     }
 }
