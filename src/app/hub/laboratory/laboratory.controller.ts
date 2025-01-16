@@ -4,7 +4,7 @@ import { CreateLaboratoryDto } from './dto/create-laboratory.dto';
 import { UpdateLaboratoryDto } from './dto/update-laboratory.dto';
 import { PaginationDto } from 'src/common/database/dto/pagination.dto';
 
-@Controller('hub/laboratory')
+@Controller('hub/laboratories')
 export class LaboratoryController {
   constructor(private readonly laboratoryService: LaboratoryService) {}
 

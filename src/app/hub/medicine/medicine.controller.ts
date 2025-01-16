@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { MedicineService } from './medicine.service';
 import { CreateMedicineDto } from './dto/create-medicine.dto';
 import { UpdateMedicineDto } from './dto/update-medicine.dto';
@@ -16,8 +27,8 @@ export class MedicineController {
   }
 
   @Get()
-  findAll(@Query() paginationDto: PaginationDto) {
-    return this.medicineService.findAll(paginationDto);
+  async findAll(@Query() paginationDto: PaginationDto) {
+    return await this.medicineService.findAll(paginationDto);
   }
 
   @Get(':id')
@@ -26,7 +37,10 @@ export class MedicineController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateMedicineDto: UpdateMedicineDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateMedicineDto: UpdateMedicineDto,
+  ) {
     return this.medicineService.update(id, updateMedicineDto);
   }
 

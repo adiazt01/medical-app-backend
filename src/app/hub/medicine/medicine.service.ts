@@ -9,8 +9,8 @@ import { UploadService } from '@/common/upload/upload.service';
 export class MedicineService {
   constructor(
     private prismaService: PrismaService,
-    private uploadService: UploadService
-  ) { }
+    private uploadService: UploadService,
+  ) {}
 
   async create(createMedicineDto: CreateMedicineDto) {
     try {
@@ -21,32 +21,33 @@ export class MedicineService {
           price: createMedicineDto.price,
           file: {
             connect: {
-              id: createMedicineDto.fileId
-            }
+              id: createMedicineDto.fileId,
+            },
           },
           therapeuticAction: {
             connect: {
-              id: createMedicineDto.therapeuticActionId
-            }
+              id: createMedicineDto.therapeuticActionId,
+            },
           },
           presentation: {
             connect: {
-              id: createMedicineDto.presentationId
-            }
+              id: createMedicineDto.presentationId,
+            },
           },
           mainComponent: {
             connect: {
-              id: createMedicineDto.mainComponentId
-            }
+              id: createMedicineDto.mainComponentId,
+            },
           },
           laboratory: {
             connect: {
-              id: createMedicineDto.laboratoryId
-            }
-          }
-        }
-      })
+              id: createMedicineDto.laboratoryId,
+            },
+          },
+        },
+      });
     } catch (error) {
+      console.log(error); 
       throw new Error(error);
     }
   }
@@ -55,7 +56,7 @@ export class MedicineService {
     try {
       const limit = paginationDto.limit;
       const skip = paginationDto.skip;
- 
+
       const data = await this.prismaService.medicine.findMany({
         take: limit,
         skip: skip,
@@ -64,20 +65,31 @@ export class MedicineService {
           mainComponent: true,
           presentation: true,
           therapeuticAction: true,
-          file: true
-        }
-      })
+          file: true,
+        },
+      });
 
-      const dataWithImage = await Promise.all(data.map(async (medicine) => {
-        const imgUrl = await this.uploadService.getImage(medicine.file.path);
-        console.log(imgUrl);
-        (medicine.file as any).url = imgUrl.publicUrl;
-        return medicine;
-      }))
+      const dataWithImage = await Promise.all(
+        data.map(async (medicine) => {
+          const imgUrl = await this.uploadService.getImage(medicine.file.path);
+          console.log(imgUrl);
+          (medicine.file as any).url = imgUrl.publicUrl;
+          return medicine;
+        }),
+      );
 
+      const totalCount = await this.prismaService.medicine.count();
 
-      return dataWithImage;
+      return {
+        data: dataWithImage,
+        meta: {
+          page: paginationDto.page,
+          limit: paginationDto.limit,
+          total: totalCount,
+        },
+      };
     } catch (error) {
+      console.log(error);
       throw new Error(error);
     }
   }
@@ -86,16 +98,16 @@ export class MedicineService {
     try {
       return await this.prismaService.medicine.findUnique({
         where: {
-          id: id
+          id: id,
         },
         include: {
           laboratory: true,
           mainComponent: true,
           presentation: true,
           therapeuticAction: true,
-          file: true
-        }
-      })
+          file: true,
+        },
+      });
     } catch (error) {
       throw new Error(error);
     }
@@ -105,7 +117,7 @@ export class MedicineService {
     try {
       return await this.prismaService.medicine.update({
         where: {
-          id: id
+          id: id,
         },
         data: {
           description: updateMedicineDto.description,
@@ -113,31 +125,31 @@ export class MedicineService {
           price: updateMedicineDto.price,
           file: {
             connect: {
-              id: updateMedicineDto.fileId
-            }
+              id: updateMedicineDto.fileId,
+            },
           },
           therapeuticAction: {
             connect: {
-              id: updateMedicineDto.therapeuticActionId
-            }
+              id: updateMedicineDto.therapeuticActionId,
+            },
           },
           presentation: {
             connect: {
-              id: updateMedicineDto.presentationId
-            }
+              id: updateMedicineDto.presentationId,
+            },
           },
           mainComponent: {
             connect: {
-              id: updateMedicineDto.mainComponentId
-            }
+              id: updateMedicineDto.mainComponentId,
+            },
           },
           laboratory: {
             connect: {
-              id: updateMedicineDto.laboratoryId
-            }
-          }
-        }
-      })
+              id: updateMedicineDto.laboratoryId,
+            },
+          },
+        },
+      });
     } catch (error) {
       throw new Error(error);
     }
@@ -147,9 +159,9 @@ export class MedicineService {
     try {
       return await this.prismaService.medicine.delete({
         where: {
-          id: id
+          id: id,
         },
-      })
+      });
     } catch (error) {
       throw new Error(error);
     }
