@@ -1,45 +1,86 @@
-import { Injectable } from '@nestjs/common';
-import { UpdateAuthDto } from './dto/update-auth.dto';
-import { MailerService } from '@nestjs-modules/mailer';
+import { Injectable, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+
+import { UserLoginDto } from './dto/user-login.dto';
+import { UserRegisterDto } from './dto/user-register.dto';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
-  constructor (
-    private readonly mailerService: MailerService
+  constructor(
+    private userService: UserService,
+    private jwtService: JwtService,
   ) {}
-  
-  async create() {
-    // console.log('Sending email...');
-    // return await this.mailerService
-    // .sendMail({
-    //   to: 'armandodt2004@gmail.com', // list of receivers
-    //   from: process.env.SMTP_FROM, // sender address
-    //   subject: 'Testing Nest MailerModule ✔', // Subject line
-    //   text: 'welcome', // plaintext body
-    //   html: '<b>welcome</b>', // HTML body content
-    // })
-    // .then(() => {
-    //   console.log('Email sent');
-    // })
-    // .catch((error) => {
-    //   console.error('Error:', error);
-    // })
-    
+
+  async signIn(userLoginDto: UserLoginDto) {
+    const { email, password } = userLoginDto;
+
+    const user = await this.userService.findOneByEmail(email);
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    if (user instanceof Error) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('invalid email or password');
+    }
+
+    const payload = {
+      email: user.email,
+      sub: user.id,
+      permission: user.permission || 'default_permission',
+      userType: user.userType,
+    };
+
+    return {
+      access_token: this.jwtService.sign(payload, {
+        expiresIn: '1d',
+      }),
+    };
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async signUp(userRegisterDto: UserRegisterDto) {
+    const { email, password, name } = userRegisterDto;
+
+    const user = await this.userService.findOneByEmail(email);
+
+    if (user) {
+      throw new UnauthorizedException('user already exists');
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await this.userService.create({
+      email,
+      password: hashedPassword,
+      name,
+    });
+
+    if (newUser instanceof Error) {
+      throw new InternalServerErrorException('Failed to create user');
+    }
+
+    const payload = {
+      email: newUser.email,
+      sub: newUser.id,
+      permission: newUser.permission,
+      userType: newUser.userType,
+    };
+    return {
+      access_token: this.jwtService.sign(payload, {
+        expiresIn: '1d',
+      }),
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
+  async getAll() {
+    return this.userService.getAll();
   }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
-  }
+  async update() {}
+  async remove() {}
 }

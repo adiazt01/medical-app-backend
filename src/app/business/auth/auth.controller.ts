@@ -7,32 +7,33 @@ import { UserRegisterDto } from 'src/app/hub/auth/dto/user-register.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('sign-in')
-  signIn(@Body() UserLoginDto: UserLoginDto) {
-    return this.authService.create();
+  async signIn(@Body() userLoginDto: UserLoginDto) {
+    return this.authService.signIn(userLoginDto);
   }
 
   @HttpCode(HttpStatus.CREATED)
   @Post('sign-up')
-  create(@Body() userRegister: UserRegisterDto) {
-    return this.authService.create();
+  async signUp(@Body() userRegisterDto: UserRegisterDto) {
+    return this.authService.signUp(userRegisterDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
+  @HttpCode(HttpStatus.OK)
+  @Get('clients')
+  async getAll() {
+    return this.authService.getAll();
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
+  async update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
+    return this.authService.update();
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+    return this.authService.remove();
   }
 }
