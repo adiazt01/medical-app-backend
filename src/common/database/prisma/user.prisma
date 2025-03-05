@@ -4,6 +4,7 @@ enum UserType {
 }
 
 enum Permission {
+    USER
     GUEST
     PREMIUM
     WORKER

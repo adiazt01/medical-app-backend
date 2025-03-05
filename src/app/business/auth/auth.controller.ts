@@ -26,14 +26,4 @@ export class AuthController {
   async getAll() {
     return this.authService.getAll();
   }
-
-  @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update();
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove();
-  }
 }

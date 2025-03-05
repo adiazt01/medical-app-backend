@@ -80,7 +80,4 @@ export class AuthService {
   async getAll() {
     return this.userService.getAll();
   }
-
-  async update() {}
-  async remove() {}
 }
