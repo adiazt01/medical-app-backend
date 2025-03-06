@@ -6,6 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { CartService } from '../user/cart/cart.service';
 import { DatabaseModule } from '@/common/database/database.module';
+import { InvalidTokenService } from './invalid-token.service';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { DatabaseModule } from '@/common/database/database.module';
     DatabaseModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, CartService],
+  providers: [AuthService, JwtStrategy, CartService, InvalidTokenService],
+  exports: [InvalidTokenService],
 })
 export class AuthModule {}
