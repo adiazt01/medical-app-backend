@@ -13,7 +13,11 @@ enum Permission {
 
 model User {
     id       Int    @id @default(autoincrement())
-    name     String
+    username String @unique
+
+    firstName String
+    lastName  String
+
     email    String @unique
     password String
 
@@ -23,16 +27,17 @@ model User {
     employee Employee?
     costumer Costumer?
 
-    orders Order[]
-
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    Cart Cart?
+
+    Order Order[]
+    Billing Billing[]
 }
 
 model Employee {
     id        Int    @id @default(autoincrement())
-    firstName String
-    lastName  String
 
     userId Int?  @unique
     user   User? @relation(fields: [userId], references: [id])

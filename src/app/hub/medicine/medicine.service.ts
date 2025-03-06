@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMedicineDto } from './dto/create-medicine.dto';
+import { CreateMedicineDto } from './dto/create-medicine-query.dto';
 import { UpdateMedicineDto } from './dto/update-medicine.dto';
 import { PrismaService } from '@/common/database/prisma.service';
 import { PaginationDto } from '@/common/database/dto/pagination.dto';
 import { UploadService } from '@/common/upload/upload.service';
+import { OptionsSearchMedicineQuery } from './dto/search-medicine.dto';
 
 @Injectable()
 export class MedicineService {
@@ -52,14 +53,45 @@ export class MedicineService {
     }
   }
 
-  async findAll(paginationDto: PaginationDto) {
+  async findAll(paginationDto: PaginationDto, optionsSearchMedicineQuery?: OptionsSearchMedicineQuery) {
     try {
       const limit = paginationDto.limit;
       const skip = paginationDto.skip;
 
+      const { description, laboratoryName, mainComponentName, name, presentationName, price, therapeuticActionName } = optionsSearchMedicineQuery || {};
+
+      const where: any = {};
+
+      if (description) {
+        where.description = { contains: description, mode: 'insensitive' };
+      }
+      if (laboratoryName) {
+        where.laboratory = { name: { contains: laboratoryName, mode: 'insensitive' } };
+      }
+      if (mainComponentName) {
+        where.mainComponent = { name: { contains: mainComponentName, mode: 'insensitive' } };
+      }
+
+      if (name) {
+        where.name = { contains: name, mode: 'insensitive' };
+      }
+
+      if (presentationName) {
+        where.presentation = { name: { contains: presentationName, mode: 'insensitive' } };
+      }
+
+      if (price) {
+        where.price = price;
+      }
+      
+      if (therapeuticActionName) {
+        where.therapeuticAction = { name: { contains: therapeuticActionName, mode: 'insensitive' } };
+      }
+
       const data = await this.prismaService.medicine.findMany({
         take: limit,
         skip: skip,
+        where: where,
         include: {
           laboratory: true,
           mainComponent: true,
@@ -78,7 +110,7 @@ export class MedicineService {
         }),
       );
 
-      const totalCount = await this.prismaService.medicine.count();
+      const totalCount = await this.prismaService.medicine.count({ where: where });
 
       return {
         data: dataWithImage,

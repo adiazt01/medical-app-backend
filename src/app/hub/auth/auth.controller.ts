@@ -3,9 +3,6 @@ import { AuthService } from './auth.service';
 import { UserLoginDto } from './dto/user-login.dto';
 import { UserRegisterDto } from './dto/user-register.dto';
 import { AuthHubGuard } from './auth-hub/auth-hub.guard';
-import { Permission } from '@prisma/client';
-import { RequirePermission } from 'src/common/guards/permission/permission.decorator';
-import { PermissionGuard } from 'src/common/guards/permission/permission.guard';
 
 @Controller('hub/auth')
 export class AuthController {
@@ -14,6 +11,7 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @Post('sign-in')
     async signIn(@Body() userLoginDto: UserLoginDto) {
+
         return this.authService.signIn(userLoginDto);
     }
 

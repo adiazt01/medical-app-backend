@@ -4,8 +4,6 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UserLoginDto } from './dto/user-login.dto';
 import { UserRegisterDto } from './dto/user-register.dto';
-import * as dayjs from 'dayjs';
-import exp from 'constants';
 
 @Injectable()
 export class AuthService {

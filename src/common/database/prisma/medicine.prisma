@@ -20,10 +20,13 @@ model Medicine {
     laboratory Laboratory @relation(fields: [laboratoryId], references: [id])
 
     branches BranchMedicine[]
-    orders OrderItem[]
     
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    CartItem CartItem[]
+
+    OrderItem OrderItem[]
 }
 
 model TherapeuticAction {
