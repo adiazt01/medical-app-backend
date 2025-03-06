@@ -7,9 +7,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { MedicineService } from './medicine.service';
-import { MedicineGuard } from './guards/medicine.guard';
+import { BusinessGuard } from '../auth/guards/business.guard';
 
-@UseGuards(MedicineGuard)
+@UseGuards(BusinessGuard)
 @Controller('business/medicine')
 export class MedicineController {
   constructor(private readonly medicineService: MedicineService) {}

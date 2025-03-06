@@ -6,10 +6,14 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { AuthService } from 'src/app/business/auth/auth.service';
 
 @Injectable()
-export class MedicineGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+export class BusinessGuard implements CanActivate {
+  constructor(
+    private jwtService: JwtService,
+    private authService: AuthService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -17,6 +21,10 @@ export class MedicineGuard implements CanActivate {
 
     if (!token) {
       throw new UnauthorizedException('Invalid token');
+    }
+
+    if (this.authService.isTokenInvalidated(token)) {
+      throw new UnauthorizedException('Token has been invalidated');
     }
 
     try {

@@ -1,9 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 import { UserLoginDto } from './dto/user-login.dto';
-import { CreateAuthDto } from './dto/create-auth.dto';
 import { UserRegisterDto } from 'src/app/hub/auth/dto/user-register.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -25,5 +24,12 @@ export class AuthController {
   @Get('clients')
   async getAll() {
     return this.authService.getAll();
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('logout')
+  @UseGuards(AuthGuard('jwt'))
+  async logout(@Body('token') token: string) {
+    return this.authService.logout(token);
   }
 }

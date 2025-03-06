@@ -2,10 +2,12 @@ import { Module } from '@nestjs/common';
 import { MedicineService } from './medicine.service';
 import { MedicineController } from './medicine.controller';
 import { PrismaService } from 'src/common/database/prisma.service';
-import { MedicineGuard } from './guards/medicine.guard';
+import { BusinessGuard } from '../auth/guards/business.guard';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   controllers: [MedicineController],
-  providers: [MedicineService, PrismaService, MedicineGuard],
+  providers: [MedicineService, PrismaService, BusinessGuard],
+  imports: [AuthModule],
 })
 export class MedicineModule {}

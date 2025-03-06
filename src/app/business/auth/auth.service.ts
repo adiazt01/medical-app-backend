@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
@@ -8,6 +12,8 @@ import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
+  private invalidatedTokens: Set<string> = new Set();
+
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
@@ -79,5 +85,14 @@ export class AuthService {
 
   async getAll() {
     return this.userService.getAll();
+  }
+
+  async logout(token: string) {
+    this.invalidatedTokens.add(token);
+    return { message: 'Logged out successfully!' };
+  }
+
+  isTokenInvalidated(token: string): boolean {
+    return this.invalidatedTokens.has(token);
   }
 }
