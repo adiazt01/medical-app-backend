@@ -6,10 +6,10 @@ import { PaginationDto } from 'src/common/database/dto/pagination.dto';
 import { AuthHubGuard } from '../../auth/auth-hub/auth-hub.guard';
 import { HUB } from '@/common/constants/prefix/hub.prefix';
 
-@UseGuards(AuthHubGuard)
 @Controller(HUB.THERAPEUTIC_ACTIONS)
+@UseGuards(AuthHubGuard)
 export class TherapeuticActionController {
-  constructor(private readonly therapeuticActionService: TherapeuticActionService) {}
+  constructor(private therapeuticActionService: TherapeuticActionService) {}
 
   @Post()
   create(@Body() createTherapeuticActionDto: CreateTherapeuticActionDto) {
@@ -17,8 +17,8 @@ export class TherapeuticActionController {
   }
 
   @Get()
-  findAll(@Query() paginationDto: PaginationDto) {
-    return this.therapeuticActionService.findAll(paginationDto);
+  async findAll(@Query() paginationDto?: PaginationDto) {
+    return await this.therapeuticActionService.findAll(paginationDto);
   }
 
   @Get(':id')

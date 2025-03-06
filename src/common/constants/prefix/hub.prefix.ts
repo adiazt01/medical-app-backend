@@ -7,8 +7,8 @@ export enum HUB {
 
     // Medicines and its related entities
     MEDICINES = 'hub/medicines',
-    THERAPEUTIC_ACTIONS = 'hub/medicines/therapeutic-actions',
-    MAIN_COMPONENTS = 'hub/medicines/main-components',
-    PRESENTATIONS = 'hub/medicines/presentations',
-    BRANCH_MEDICINE = 'hub/medicines/branchs-medicines',
+    THERAPEUTIC_ACTIONS = 'hub/therapeutic-actions',
+    MAIN_COMPONENTS = 'hub/main-components',
+    PRESENTATIONS = 'hub/presentations',
+    BRANCH_MEDICINE = 'hub/branchs-medicines',
 }

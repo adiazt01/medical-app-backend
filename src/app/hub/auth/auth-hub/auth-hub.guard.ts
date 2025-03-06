@@ -28,7 +28,7 @@ export class AuthHubGuard implements CanActivate {
       if (payload.role !== Role.MODERATOR) {
         throw new UnauthorizedException('Invalid role');
       }
-
+      console.log(payload);
       request.user = payload;
       
     } catch (error) {

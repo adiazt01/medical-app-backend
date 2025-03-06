@@ -6,8 +6,8 @@ import { PaginationDto } from 'src/common/database/dto/pagination.dto';
 import { AuthHubGuard } from '../../auth/auth-hub/auth-hub.guard';
 import { HUB } from '@/common/constants/prefix/hub.prefix';
 
-@UseGuards(AuthHubGuard)
 @Controller(HUB.MAIN_COMPONENTS)
+@UseGuards(AuthHubGuard)
 export class MainComponentController {
   constructor(private readonly mainComponentService: MainComponentService) {}
 

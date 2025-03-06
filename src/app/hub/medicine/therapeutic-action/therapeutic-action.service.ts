@@ -22,10 +22,10 @@ export class TherapeuticActionService {
     }
   }
 
-  async findAll(paginationDto: PaginationDto) {
+  async findAll(paginationDto?: PaginationDto) {
     try {
-      const skip = paginationDto.skip;
-      const limit = paginationDto.limit;
+      const skip = paginationDto?.skip;
+      const limit = paginationDto?.limit;
 
       return await this.prismaService.therapeuticAction.findMany({
         take: limit,

@@ -5,10 +5,10 @@ export enum APP {
 
     // Medicines and its related entities
     MEDICINE = 'medicines',
-    THERAPEUTIC_ACTION = 'medicines/therapeutic-actions',
-    MAIN_COMPONENT = 'medicines/main-components',
-    PRESENTATION = 'medicines/presentations',
+    THERAPEUTIC_ACTION = 'therapeutic-actions',
+    MAIN_COMPONENT = 'main-components',
+    PRESENTATION = 'presentations',
 
-    BRANCH_MEDICINES = 'medicines/branch-medicines',
+    BRANCH_MEDICINES = 'branch-medicines',
 
 }
