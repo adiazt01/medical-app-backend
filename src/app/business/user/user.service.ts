@@ -8,12 +8,15 @@ import { PrismaService } from 'src/common/database/prisma.service';
 export class UserService {
   constructor(private prismaService: PrismaService) {}
 
-  async findOneByEmail(email: string): Promise<User | Error> {
+  async findOneByEmail(email: string) {
     try {
       return await this.prismaService.user.findUnique({
         where: {
           email: email,
         },
+        include: {
+          Cart: true,
+        }
       });
     } catch (error) {
       throw new Error(error);

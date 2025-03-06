@@ -26,8 +26,7 @@ model Cart {
     userId    Int      @unique
     user      User     @relation(fields: [userId], references: [id])
     cartItems CartItem[]
-    
-    quantity  Int
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
@@ -36,9 +35,12 @@ model CartItem {
     id        Int      @id @default(autoincrement())
     cartId    Int
     cart      Cart     @relation(fields: [cartId], references: [id])
+
     medicineId Int
     medicine   Medicine @relation(fields: [medicineId], references: [id])
+
     quantity   Int
+
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
 }

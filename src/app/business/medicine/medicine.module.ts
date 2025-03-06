@@ -7,5 +7,6 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 @Module({
   controllers: [MedicineController],
   providers: [MedicineService, PrismaService, AuthGuard],
+  exports: [MedicineService],
 })
 export class MedicineModule {}
