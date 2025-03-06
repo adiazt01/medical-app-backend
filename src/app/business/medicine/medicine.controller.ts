@@ -7,10 +7,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { MedicineService } from './medicine.service';
-import { MedicineGuard } from './guards/medicine.guard';
+import { AuthGuard } from '../auth/guards/auth.guard';
 
-@UseGuards(MedicineGuard)
-@Controller('business/medicine')
+@Controller('medicines')
+@UseGuards(AuthGuard)
 export class MedicineController {
   constructor(private readonly medicineService: MedicineService) {}
 

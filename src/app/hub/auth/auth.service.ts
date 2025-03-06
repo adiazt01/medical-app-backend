@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UserLoginDto } from './dto/user-login.dto';
 import { UserRegisterDto } from './dto/user-register.dto';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -24,44 +25,44 @@ export class AuthService {
       return new UnauthorizedException('Invalid email or password');
     }
 
-    const payload = { 
-      email: user.email, 
-      sub: user.id, 
-      permission: user.permission, 
-      userType: user.userType,
-    };
+    const token = await this.generateToken(user);
 
     return {
-      access_token: this.jwtService.sign(payload, {
-        expiresIn: '1d',
-      }),
-    };
+      access_token: token,
+    }
   }
 
   async signUp(userRegisterDto: UserRegisterDto) {
-    const { email, password, name } = userRegisterDto;
+    const { email, password, lastNames, firstNames } = userRegisterDto;
 
     const user = await this.userService.findOneByEmail(email);
-    
+
     if (user) {
       return new UnauthorizedException('User already exists');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await this.userService.create({ email, password: hashedPassword, name });
-    
-    const payload = { 
-      email: newUser.email,
-      sub: newUser.id, 
-      permission: newUser.permission, 
-      userType: newUser.userType
-    };
-    
+    const newUser = await this.userService.create({ email, password: hashedPassword, firstNames, lastNames, role: userRegisterDto.role });
+
+    const token = await this.generateToken(newUser);
+
     return {
-      access_token: this.jwtService.sign(payload, {
-        expiresIn: '1d'
-      }),
+      access_token: token,
     };
+  }
+
+  private async generateToken(user: User) {
+    const payload = {
+      email: user.email,
+      sub: user.id,
+      role: user.role,
+      firstNames: user.firstNames,
+      lastNames: user.lastNames,
+    };
+
+    return this.jwtService.sign(payload, {
+      expiresIn: '1d',
+    });
   }
 }

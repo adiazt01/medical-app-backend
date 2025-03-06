@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
 @Injectable()
-export class MedicineGuard implements CanActivate {
+export class AuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -23,7 +23,7 @@ export class MedicineGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: 'SECRET',
       });
-      console.log(payload);
+
       request.user = payload;
     } catch {
       throw new UnauthorizedException('Invalid token');

@@ -1,7 +1,7 @@
 import { UserRegisterDto } from '../auth/dto/user-register.dto';
 
 import { Injectable } from '@nestjs/common';
-import { User, UserType, Permission } from '@prisma/client';
+import { User, Role } from '@prisma/client';
 import { PrismaService } from 'src/common/database/prisma.service';
 
 @Injectable()
@@ -24,9 +24,9 @@ export class UserService {
       data: {
         email: userRegisterDto.email,
         password: userRegisterDto.password,
-        name: userRegisterDto.name,
-        userType: UserType.USER,
-        permission: Permission.GUEST,
+        firstNames: userRegisterDto.firstNames,
+        lastNames: userRegisterDto.lastNames,
+        role: Role.USER,
       },
     });
   }

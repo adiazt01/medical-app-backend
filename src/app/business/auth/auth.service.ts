@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserLoginDto } from './dto/user-login.dto';
 import { UserRegisterDto } from './dto/user-register.dto';
 import { UserService } from '../user/user.service';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -25,27 +26,22 @@ export class AuthService {
     if (user instanceof Error) {
       throw new UnauthorizedException('Invalid email or password');
     }
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    
     if (!isPasswordValid) {
       throw new UnauthorizedException('invalid email or password');
     }
 
-    const payload = {
-      email: user.email,
-      sub: user.id,
-      permission: user.permission || 'default_permission',
-      userType: user.userType,
-    };
+    const token = await this.generateToken(user);
 
     return {
-      access_token: this.jwtService.sign(payload, {
-        expiresIn: '1d',
-      }),
+      access_token: token,
     };
   }
 
   async signUp(userRegisterDto: UserRegisterDto) {
-    const { email, password, name } = userRegisterDto;
+    const { email, password, lastNames, firstNames } = userRegisterDto;
 
     const user = await this.userService.findOneByEmail(email);
 
@@ -57,27 +53,32 @@ export class AuthService {
     const newUser = await this.userService.create({
       email,
       password: hashedPassword,
-      name,
+      firstNames: firstNames,
+      lastNames: lastNames,
     });
 
     if (newUser instanceof Error) {
       throw new InternalServerErrorException('Failed to create user');
     }
 
-    const payload = {
-      email: newUser.email,
-      sub: newUser.id,
-      permission: newUser.permission,
-      userType: newUser.userType,
-    };
+    const token = await this.generateToken(newUser);
+
     return {
-      access_token: this.jwtService.sign(payload, {
-        expiresIn: '1d',
-      }),
+      access_token: token,
     };
   }
 
-  async getAll() {
-    return this.userService.getAll();
+  private async generateToken(user: User) {
+    const payload = {
+      email: user.email,
+      sub: user.id,
+      role: user.role,
+      firstNames: user.firstNames,
+      lastNames: user.lastNames,
+    };
+
+    return this.jwtService.sign(payload, {
+      expiresIn: '1d',
+    });
   }
 }

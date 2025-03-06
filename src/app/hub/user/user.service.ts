@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/common/database/prisma.service';
 import { UserRegisterDto } from '../auth/dto/user-register.dto';
-import { Permission, User, UserType } from '@prisma/client';
 import { PaginationDto } from 'src/common/database/dto/pagination.dto';
+import { Role, User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -26,9 +26,9 @@ export class UserService {
         data: {
           email: userRegisterDto.email,
           password: userRegisterDto.password,
-          userType: UserType.MODERATOR,
-          permission: Permission.ADMIN,
-          name: userRegisterDto.name,
+          firstNames: userRegisterDto.firstNames,
+          lastNames: userRegisterDto.lastNames,
+          role: Role[userRegisterDto.role.toString().toUpperCase()],
         }
       });
     } catch (error) {
