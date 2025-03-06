@@ -6,7 +6,7 @@ import { AuthHubGuard } from './auth-hub/auth-hub.guard';
 
 @Controller('hub/auth')
 export class AuthController {
-    constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) { }
 
     @HttpCode(HttpStatus.OK)
     @Post('sign-in')
@@ -15,16 +15,16 @@ export class AuthController {
         return this.authService.signIn(userLoginDto);
     }
 
-    @HttpCode(HttpStatus.CREATED)
-    @Post('sign-up')
-    async signUp(@Body() userRegisterDto: UserRegisterDto) {
-        return this.authService.signUp(userRegisterDto);
-    }
+  @HttpCode(HttpStatus.CREATED)
+  @Post('sign-up')
+  async signUp(@Body() userRegisterDto: UserRegisterDto) {
+    return this.authService.signUp(userRegisterDto);
+  }
 
-    @HttpCode(HttpStatus.OK)
-    @Get('logout')
-    @UseGuards(AuthHubGuard)
-    async logout() {
-        return 'logout';
-    }
+  @HttpCode(HttpStatus.OK)
+  @Get('logout')
+  @UseGuards(AuthHubGuard)
+  async logout() {
+    return 'logout';
+  }
 }
