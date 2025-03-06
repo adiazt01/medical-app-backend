@@ -7,7 +7,7 @@ export class CreateCartItemDto {
     @IsInt()
     @IsPositive()
     quantity: number = 1;
-
+    
     @IsInt()
-    cartId: number;
+    branchId: number;
 }

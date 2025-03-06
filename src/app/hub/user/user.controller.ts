@@ -2,9 +2,9 @@ import { Controller, Get, Param, ParseIntPipe, Query, UseGuards } from "@nestjs/
 import { UserService } from "./user.service";
 import { PaginationDto } from "src/common/database/dto/pagination.dto";
 import { AuthHubGuard } from "../auth/auth-hub/auth-hub.guard";
-import { HubPrefix } from "@/common/constants/prefix/hub.prefix";
+import { HUB } from "@/common/constants/prefix/hub.prefix";
 
-@Controller(HubPrefix.USER)
+@Controller(HUB.USER)
 @UseGuards(AuthHubGuard)
 export class UserController {
   constructor(

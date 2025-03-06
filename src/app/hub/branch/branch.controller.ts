@@ -3,8 +3,9 @@ import { BranchService } from './branch.service';
 import { CreateBranchDto } from './dto/create-branch.dto';
 import { UpdateBranchDto } from './dto/update-branch.dto';
 import { PaginationDto } from 'src/common/database/dto/pagination.dto';
+import { HUB } from '@/common/constants/prefix/hub.prefix';
 
-@Controller('hub/branch')
+@Controller(HUB.BRANCHS)
 export class BranchController {
   constructor(private readonly branchService: BranchService) {}
 

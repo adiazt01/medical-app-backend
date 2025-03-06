@@ -31,7 +31,8 @@ export class AuthHubGuard implements CanActivate {
 
       request.user = payload;
       
-    } catch {
+    } catch (error) {
+      console.error(error);
       throw new UnauthorizedException('Invalid token');
     }
     return true;

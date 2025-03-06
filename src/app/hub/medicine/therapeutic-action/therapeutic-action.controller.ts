@@ -4,9 +4,10 @@ import { CreateTherapeuticActionDto } from './dto/create-therapeutic-action.dto'
 import { UpdateTherapeuticActionDto } from './dto/update-therapeutic-action.dto';
 import { PaginationDto } from 'src/common/database/dto/pagination.dto';
 import { AuthHubGuard } from '../../auth/auth-hub/auth-hub.guard';
+import { HUB } from '@/common/constants/prefix/hub.prefix';
 
 @UseGuards(AuthHubGuard)
-@Controller('hub/therapeutic-actions')
+@Controller(HUB.THERAPEUTIC_ACTIONS)
 export class TherapeuticActionController {
   constructor(private readonly therapeuticActionService: TherapeuticActionService) {}
 

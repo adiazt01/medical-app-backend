@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, UseInterceptors, ParseIntPipe } from '@nestjs/common';
 import { FileService } from './file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { HubPrefix } from '@/common/constants/prefix/hub.prefix';
+import { HUB } from '@/common/constants/prefix/hub.prefix';
 
 
-@Controller(HubPrefix.FILE)
+@Controller(HUB.FILE)
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
