@@ -28,10 +28,11 @@ export class AuthHubGuard implements CanActivate {
       if (payload.role !== Role.MODERATOR) {
         throw new UnauthorizedException('Invalid role');
       }
-
+      console.log(payload);
       request.user = payload;
       
-    } catch {
+    } catch (error) {
+      console.error(error);
       throw new UnauthorizedException('Invalid token');
     }
     return true;

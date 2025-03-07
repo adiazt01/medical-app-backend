@@ -36,6 +36,19 @@ export class BranchMedicineService {
     return branchMedicine;
   }
 
+  async findByBranch(branchId: number) {
+    const branchMedicines = await this.prismaService.branchMedicine.findMany({
+      where: {
+        branchId
+      },
+      include: {
+        medicine: true
+      }
+    });
+
+    return branchMedicines;
+  }
+
   async update(id: number, updateBranchMedicineDto: UpdateBranchMedicineDto) {
     const { quantity } = updateBranchMedicineDto;
 

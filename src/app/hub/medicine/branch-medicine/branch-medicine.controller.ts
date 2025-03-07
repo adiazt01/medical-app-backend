@@ -20,6 +20,11 @@ export class BranchMedicineController {
     return this.branchMedicineService.findOne(id);
   }
 
+  @Get("branch/:branchId")
+  findByBranch(@Param('branchId', ParseIntPipe) branchId: number) {
+    return this.branchMedicineService.findByBranch(branchId);
+  }
+
   @Patch(':id')
   update(@Param('id', ParseIntPipe) id: number, @Body() updateBranchMedicineDto: UpdateBranchMedicineDto) {
     return this.branchMedicineService.update(+id, updateBranchMedicineDto);

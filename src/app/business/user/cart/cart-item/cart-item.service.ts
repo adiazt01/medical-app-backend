@@ -1,40 +1,87 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCartItemDto } from './dto/create-cart-item.dto';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto';
-import { MedicineService } from 'src/app/business/medicine/medicine.service';
-import { CartService } from '../cart.service';
+import { BranchMedicinesService } from 'src/app/business/medicine/branch-medicines/branch-medicines.service';
+import { PrismaService } from '@/common/database/prisma.service';
 
 @Injectable()
 export class CartItemService {
-  constructor (
-    private readonly medicineService: MedicineService,
-    private readonly cartService: CartService
-  ) {}
-  
+  constructor(
+    private branchMedicineService: BranchMedicinesService,
+    private prismaService: PrismaService
+  ) { }
+
   async create(createCartItemDto: CreateCartItemDto, cartId: number) {
-    const { medicineId, quantity } = createCartItemDto;
+    const { medicineId, quantity, branchId } = createCartItemDto;
 
-    const medicine = await this.medicineService.findOne(medicineId);
+    const branchMedicine = await this.branchMedicineService.findOneMedicineByBranchId(branchId, medicineId);
 
-    if (!medicine) {
-      
+    if (!branchMedicine) {
+      throw new NotFoundException('Medicine not found or not available in this branch');
     }
 
+    if (branchMedicine.quantity < quantity) {
+      throw new NotFoundException('Medicine stock is not enough');
+    }
+
+    const cartItem = await this.prismaService.cartItem.create({
+      data: {
+        quantity: quantity,
+        cart: {
+          connect: {
+            id: cartId
+          }
+        },
+        medicine: {
+          connect: {
+            id: medicineId
+          }
+        }
+      }
+    });
+
+    return cartItem;
   }
 
-  findAll() {
-    return `This action returns all cartItem`;
+  async findAll(cartId: number) {
+    return await this.prismaService.cartItem.findMany({
+      where: {
+        cart: {
+          id: cartId
+        }
+      },
+      include: {
+        medicine: true,
+      }
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} cartItem`;
+  async findOne(id: number) {
+    return await this.prismaService.cartItem.findUnique({
+      where: {
+        id: id
+      },
+      include: {
+        medicine: true,
+        cart: true
+      }
+    });
   }
 
-  update(id: number, updateCartItemDto: UpdateCartItemDto) {
-    return `This action updates a #${id} cartItem`;
+  async update(id: number, updateCartItemDto: UpdateCartItemDto) {
+    return await this.prismaService.cartItem.update({
+      where: {
+        id: id
+      },
+      data: updateCartItemDto
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cartItem`;
+  async remove(id: number) {
+    return await this.prismaService.cartItem.delete({
+      where: {
+        id: id
+      }
+    });
   }
 }

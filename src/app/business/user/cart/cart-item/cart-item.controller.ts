@@ -4,11 +4,9 @@ import { CreateCartItemDto } from './dto/create-cart-item.dto';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto';
 import { APP } from '@/common/constants/prefix/app.prefix';
 import { AuthGuard } from 'src/app/business/auth/guards/auth.guard';
-import { UserApp } from '@/common/decorators/get-current-user-app.decorator';
-import { IPayloadToken } from 'src/app/business/auth/interface/payload.interface';
 import { GetCart } from '@/common/decorators/get-cart.decorator';
 
-@Controller(APP.CART)
+@Controller(APP.CARTS)
 @UseGuards(AuthGuard)
 export class CartItemController {
   constructor(private readonly cartItemService: CartItemService) {}
@@ -19,8 +17,8 @@ export class CartItemController {
   }
 
   @Get()
-  findAll() {
-    return this.cartItemService.findAll();
+  findAll(@GetCart() cartId: number) {
+    return this.cartItemService.findAll(cartId);
   }
 
   @Get(':id')

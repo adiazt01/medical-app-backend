@@ -15,10 +15,11 @@ import { CreateMedicineDto } from './dto/create-medicine-query.dto';
 import { UpdateMedicineDto } from './dto/update-medicine.dto';
 import { PaginationDto } from '@/common/database/dto/pagination.dto';
 import { AuthHubGuard } from '../auth/auth-hub/auth-hub.guard';
-import { OptionsSearchMedicineQuery } from './dto/search-medicine.dto';
+
+import { HUB } from '@/common/constants/prefix/hub.prefix';
 
 @UseGuards(AuthHubGuard)
-@Controller('hub/medicines')
+@Controller(HUB.MEDICINES)
 export class MedicineController {
   constructor(private readonly medicineService: MedicineService) {}
 
@@ -28,8 +29,8 @@ export class MedicineController {
   }
 
   @Get()
-  async findAll(@Query() paginationDto: PaginationDto, optionsSearchMedicineQuery?: OptionsSearchMedicineQuery) {
-    return await this.medicineService.findAll(paginationDto, optionsSearchMedicineQuery);
+  async findAll(@Query() paginationDto?: PaginationDto) {
+    return await this.medicineService.findAll(paginationDto);
   }
 
   @Get(':id')

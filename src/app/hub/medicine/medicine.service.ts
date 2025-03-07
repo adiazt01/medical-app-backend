@@ -11,7 +11,7 @@ export class MedicineService {
   constructor(
     private prismaService: PrismaService,
     private uploadService: UploadService,
-  ) {}
+  ) { }
 
   async create(createMedicineDto: CreateMedicineDto) {
     try {
@@ -48,44 +48,38 @@ export class MedicineService {
         },
       });
     } catch (error) {
-      console.log(error); 
+      console.log(error);
       throw new Error(error);
     }
   }
 
-  async findAll(paginationDto: PaginationDto, optionsSearchMedicineQuery?: OptionsSearchMedicineQuery) {
+  async findAll(paginationDto: PaginationDto) {
     try {
       const limit = paginationDto.limit;
       const skip = paginationDto.skip;
+      const search = paginationDto.search;
 
-      const { description, laboratoryName, mainComponentName, name, presentationName, price, therapeuticActionName } = optionsSearchMedicineQuery || {};
 
       const where: any = {};
 
-      if (description) {
-        where.description = { contains: description, mode: 'insensitive' };
-      }
-      if (laboratoryName) {
-        where.laboratory = { name: { contains: laboratoryName, mode: 'insensitive' } };
-      }
-      if (mainComponentName) {
-        where.mainComponent = { name: { contains: mainComponentName, mode: 'insensitive' } };
-      }
+      const searchConditions = [
+        { description: { contains: search, mode: 'insensitive' } },
+        { laboratory: { name: { contains: search, mode: 'insensitive' } } },
+        { mainComponent: { name: { contains: search, mode: 'insensitive' } } },
+        { name: { contains: search, mode: 'insensitive' } },
+        { presentation: { name: { contains: search, mode: 'insensitive' } } },
+        { therapeuticAction: { name: { contains: search, mode: 'insensitive' } } },
+      ];
 
-      if (name) {
-        where.name = { contains: name, mode: 'insensitive' };
-      }
-
-      if (presentationName) {
-        where.presentation = { name: { contains: presentationName, mode: 'insensitive' } };
-      }
-
-      if (price) {
-        where.price = price;
-      }
-      
-      if (therapeuticActionName) {
-        where.therapeuticAction = { name: { contains: therapeuticActionName, mode: 'insensitive' } };
+      if (search && search.trim() !== "") {
+        const price = parseFloat(search);
+        if (!isNaN(price)) {
+          where.price = price;
+        } else {
+          where.OR = searchConditions;
+        }
+      } else {
+        where.OR = searchConditions;
       }
 
       const data = await this.prismaService.medicine.findMany({
