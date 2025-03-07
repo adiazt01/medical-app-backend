@@ -7,14 +7,17 @@ import { v4 as uuidv4 } from 'uuid';
 export class FileService {
   constructor(
     private prismaService: PrismaService,
-    private uploadService: UploadService
-  ) { }
+    private uploadService: UploadService,
+  ) {}
 
   async create(file: Express.Multer.File, folder: string) {
     try {
       const uuid = uuidv4();
-      const { fullPath, id, path } = await this.uploadService.uploadImage(file,
-        uuid, folder);
+      const { fullPath, id, path } = await this.uploadService.uploadImage(
+        file,
+        uuid,
+        folder,
+      );
       const fileName = file.originalname.split('.').slice(0, -1).join('.');
 
       return await this.prismaService.file.create({
@@ -24,8 +27,8 @@ export class FileService {
           mimeType: file.mimetype,
           fullPath: fullPath,
           path: path,
-          uploadId: id
-        }
+          uploadId: id,
+        },
       });
     } catch (error) {
       throw new Error(error);
@@ -44,8 +47,8 @@ export class FileService {
     try {
       return await this.prismaService.file.findUnique({
         where: {
-          id: id
-        }
+          id: id,
+        },
       });
     } catch (error) {
       throw new Error(error);
@@ -57,8 +60,8 @@ export class FileService {
       await this.uploadService.deleteImage(id.toString(), 'files');
       return await this.prismaService.file.delete({
         where: {
-          id: id
-        }
+          id: id,
+        },
       });
     } catch (error) {
       throw new Error(error);

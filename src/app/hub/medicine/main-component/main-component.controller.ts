@@ -4,9 +4,10 @@ import { CreateMainComponentDto } from './dto/create-main-component.dto';
 import { UpdateMainComponentDto } from './dto/update-main-component.dto';
 import { PaginationDto } from 'src/common/database/dto/pagination.dto';
 import { AuthHubGuard } from '../../auth/auth-hub/auth-hub.guard';
+import { HUB } from '@/common/constants/prefix/hub.prefix';
 
+@Controller(HUB.MAIN_COMPONENTS)
 @UseGuards(AuthHubGuard)
-@Controller('hub/main-components')
 export class MainComponentController {
   constructor(private readonly mainComponentService: MainComponentService) {}
 

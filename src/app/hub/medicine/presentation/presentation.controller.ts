@@ -4,9 +4,10 @@ import { CreatePresentationDto } from './dto/create-presentation.dto';
 import { UpdatePresentationDto } from './dto/update-presentation.dto';
 import { PaginationDto } from 'src/common/database/dto/pagination.dto';
 import { AuthHubGuard } from '../../auth/auth-hub/auth-hub.guard';
+import { HUB } from '@/common/constants/prefix/hub.prefix';
 
 @UseGuards(AuthHubGuard)
-@Controller('hub/presentations')
+@Controller(HUB.PRESENTATIONS)
 export class PresentationController {
   constructor(private readonly presentationService: PresentationService) {}
 

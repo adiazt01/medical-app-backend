@@ -9,7 +9,11 @@ export class UserRegisterDto {
   @IsNotEmpty()
   password: string;
 
-  @IsString()
   @IsNotEmpty()
-  name: string;
+  @IsString()
+  firstNames: string;
+
+  @IsNotEmpty()
+  @IsString()
+  lastNames: string;
 }

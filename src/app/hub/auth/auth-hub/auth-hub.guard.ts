@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Role } from '@prisma/client';
 import { Request } from 'express';
 
 @Injectable()
@@ -23,9 +24,15 @@ export class AuthHubGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: 'SECRET',
       });
+
+      if (payload.role !== Role.MODERATOR) {
+        throw new UnauthorizedException('Invalid role');
+      }
       console.log(payload);
       request.user = payload;
-    } catch {
+      
+    } catch (error) {
+      console.error(error);
       throw new UnauthorizedException('Invalid token');
     }
     return true;

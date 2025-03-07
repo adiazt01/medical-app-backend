@@ -7,8 +7,7 @@ model Branch {
 
     employees Employee[]
     medicines BranchMedicine[]
-    orders Order[]
-
+    
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }

@@ -1,39 +1,35 @@
-enum UserType {
+enum Role {
     USER
+    EMPLOYEE
     MODERATOR
-}
-
-enum Permission {
-    USER
-    GUEST
-    PREMIUM
-    WORKER
     ADMIN
-    SUPER_ADMIN
 }
 
 model User {
     id       Int    @id @default(autoincrement())
-    name     String
+ 
+    firstNames String @default("")
+    lastNames  String @default("")
+
     email    String @unique
     password String
 
-    userType   UserType   @default(USER)
-    permission Permission @default(GUEST)
+    role   Role   @default(USER)
 
     employee Employee?
     costumer Costumer?
 
-    orders Order[]
-
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    Cart Cart?
+
+    Order Order[]
+    Billing Billing[]
 }
 
 model Employee {
     id        Int    @id @default(autoincrement())
-    firstName String
-    lastName  String
 
     userId Int?  @unique
     user   User? @relation(fields: [userId], references: [id])
@@ -53,9 +49,6 @@ model Employee {
 
 model Costumer {
     id Int @id @default(autoincrement())
-
-    firstName String
-    lastName  String
 
     phone   String
     address String

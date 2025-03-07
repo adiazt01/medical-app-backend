@@ -1,19 +1,22 @@
 import { UserRegisterDto } from '../auth/dto/user-register.dto';
 
 import { Injectable } from '@nestjs/common';
-import { User, UserType, Permission } from '@prisma/client';
+import { User, Role } from '@prisma/client';
 import { PrismaService } from 'src/common/database/prisma.service';
 
 @Injectable()
 export class UserService {
   constructor(private prismaService: PrismaService) {}
 
-  async findOneByEmail(email: string): Promise<User | Error> {
+  async findOneByEmail(email: string) {
     try {
       return await this.prismaService.user.findUnique({
         where: {
           email: email,
         },
+        include: {
+          Cart: true,
+        }
       });
     } catch (error) {
       throw new Error(error);
@@ -24,9 +27,9 @@ export class UserService {
       data: {
         email: userRegisterDto.email,
         password: userRegisterDto.password,
-        name: userRegisterDto.name,
-        userType: UserType.USER,
-        permission: Permission.GUEST,
+        firstNames: userRegisterDto.firstNames,
+        lastNames: userRegisterDto.lastNames,
+        role: Role.USER,
       },
     });
   }
