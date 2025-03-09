@@ -25,6 +25,7 @@ model User {
 
     Order Order[]
     Billing Billing[]
+    Review Review[]
 }
 
 model Employee {

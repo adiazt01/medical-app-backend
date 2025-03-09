@@ -4,7 +4,7 @@ export enum APP {
     PAYMENT = 'user/payment',
 
     // Medicines and its related entities
-    MEDICINE = 'medicines',
+    MEDICINES = 'medicines',
     THERAPEUTIC_ACTION = 'therapeutic-actions',
     MAIN_COMPONENT = 'main-components',
     PRESENTATION = 'presentations',

@@ -5,18 +5,20 @@ import {
   ParseIntPipe,
   NotFoundException,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { MedicineService } from './medicine.service';
 import { AuthGuard } from '../auth/guards/auth.guard';
+import { MedicinePaginationDto } from './dto/medicine-pagination.dto';
+import { APP } from '@/common/constants/prefix/app.prefix';
 
-@Controller('medicines')
-@UseGuards(AuthGuard)
+@Controller(APP.MEDICINES)
 export class MedicineController {
   constructor(private readonly medicineService: MedicineService) {}
 
   @Get()
-  async findAll() {
-    return this.medicineService.findAll();
+  async findAll(@Query() medicinePaginationDto?: MedicinePaginationDto) {
+    return this.medicineService.findAll(medicinePaginationDto);
   }
 
   @Get(':id')

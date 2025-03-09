@@ -1,6 +1,6 @@
 export enum HUB {
-    USER = 'hub/user',
-    COSTUMER = 'hub/user/costumer',
+    USERS = 'hub/users',
+    COSTUMERS = 'hub/user/costumer',
 
     FILE = 'hub/file',
     BRANCHS = 'hub/branchs',

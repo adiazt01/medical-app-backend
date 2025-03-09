@@ -1,10 +1,10 @@
 import { Controller, Get, Param, ParseIntPipe, Query, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { PaginationDto } from "src/common/database/dto/pagination.dto";
 import { AuthHubGuard } from "../auth/auth-hub/auth-hub.guard";
 import { HUB } from "@/common/constants/prefix/hub.prefix";
+import { UserPaginationDto } from "./dto/user-pagination.dto";
 
-@Controller(HUB.USER)
+@Controller(HUB.USERS)
 @UseGuards(AuthHubGuard)
 export class UserController {
   constructor(
@@ -12,8 +12,8 @@ export class UserController {
   ) {}
 
     @Get()
-    async getUser(@Query() PaginationDto?: PaginationDto) {
-        return await this.userService.listAll(PaginationDto);
+    async getUser(@Query() PaginationDto?: UserPaginationDto) {
+        return await this.userService.findAll(PaginationDto);
     }
 
     @Get(':id')
