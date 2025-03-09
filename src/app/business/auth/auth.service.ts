@@ -1,11 +1,7 @@
 import {
   Injectable,
   UnauthorizedException,
-<<<<<<< HEAD
   InternalServerErrorException,
-=======
-  InternalServerErrorException 
->>>>>>> origin
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -108,14 +104,6 @@ export class AuthService {
 
   async logout(token: string) {
     this.invalidTokenService.addToken(token);
-  }
-
-  async logout(token: string) {
-    this.invalidatedTokens.add(token);
     return { message: 'Logged out successfully!' };
-  }
-
-  isTokenInvalidated(token: string): boolean {
-    return this.invalidatedTokens.has(token);
   }
 }

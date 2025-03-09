@@ -6,24 +6,14 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-<<<<<<<< HEAD:src/app/business/auth/guards/business.guard.ts
-import { AuthService } from 'src/app/business/auth/auth.service';
-
-@Injectable()
-export class BusinessGuard implements CanActivate {
-  constructor(
-    private jwtService: JwtService,
-    private authService: AuthService,
-========
-import { IPayloadToken } from '../interface/payload.interface';
 import { InvalidTokenService } from '../invalid-token.service';
+import { IPayloadToken } from '../interface/payload.interface';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private invalidTokenService: InvalidTokenService,
->>>>>>>> origin:src/app/business/auth/guards/auth.guard.ts
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -34,11 +24,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Invalid token');
     }
 
-<<<<<<<< HEAD:src/app/business/auth/guards/business.guard.ts
-    if (this.authService.isTokenInvalidated(token)) {
-========
     if (this.invalidTokenService.isTokenInvalid(token)) {
->>>>>>>> origin:src/app/business/auth/guards/auth.guard.ts
       throw new UnauthorizedException('Token has been invalidated');
     }
 
