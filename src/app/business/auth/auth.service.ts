@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
@@ -8,13 +12,17 @@ import { UserService } from '../user/user.service';
 import { User } from '@prisma/client';
 import { IPayloadToken } from './interface/payload.interface';
 import { CartService } from '../user/cart/cart.service';
+import { InvalidTokenService } from './invalid-token.service';
 
 @Injectable()
 export class AuthService {
+  private invalidatedTokens: Set<string> = new Set();
+
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
     private cartService: CartService,
+    private invalidTokenService: InvalidTokenService,
   ) {}
 
   async signIn(userLoginDto: UserLoginDto) {
@@ -31,7 +39,7 @@ export class AuthService {
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    
+
     if (!isPasswordValid) {
       throw new UnauthorizedException('invalid email or password');
     }
@@ -92,5 +100,10 @@ export class AuthService {
     return this.jwtService.sign(payload, {
       expiresIn: '1d',
     });
+  }
+
+  async logout(token: string) {
+    this.invalidTokenService.addToken(token);
+    return { message: 'Logged out successfully!' };
   }
 }
