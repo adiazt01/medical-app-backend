@@ -6,11 +6,15 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { InvalidTokenService } from '../invalid-token.service';
 import { IPayloadToken } from '../interface/payload.interface';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private invalidTokenService: InvalidTokenService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
@@ -18,6 +22,10 @@ export class AuthGuard implements CanActivate {
 
     if (!token) {
       throw new UnauthorizedException('Invalid token');
+    }
+
+    if (this.invalidTokenService.isTokenInvalid(token)) {
+      throw new UnauthorizedException('Token has been invalidated');
     }
 
     try {

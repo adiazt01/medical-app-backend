@@ -6,19 +6,21 @@ import { GlobalExceptionFilter } from './common/exceptions/global-exception.filt
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalPipes(new ValidationPipe({
-    transform: true,
-    whitelist: true,
-    forbidNonWhitelisted: true,
-    transformOptions: {
-      enableImplicitConversion: true
-    }
-  }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
 
   app.enableCors();
 
   app.useGlobalFilters(new GlobalExceptionFilter());
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORTp ?? 3000);
 }
 bootstrap();

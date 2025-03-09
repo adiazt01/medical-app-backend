@@ -3,7 +3,6 @@ import { FileService } from './file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { HUB } from '@/common/constants/prefix/hub.prefix';
 
-
 @Controller(HUB.FILE)
 export class FileController {
   constructor(private readonly fileService: FileService) {}
