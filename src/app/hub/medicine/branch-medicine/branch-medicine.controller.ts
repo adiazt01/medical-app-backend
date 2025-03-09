@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseIntPipe, Query } from '@nestjs/common';
 import { BranchMedicineService } from './branch-medicine.service';
 import { CreateBranchMedicineDto } from './dto/create-branch-medicine.dto';
 import { UpdateBranchMedicineDto } from './dto/update-branch-medicine.dto';
 import { AuthHubGuard } from '../../auth/auth-hub/auth-hub.guard';
 import { HUB } from '@/common/constants/prefix/hub.prefix';
+import { PaginationDto } from '@/common/database/dto/pagination.dto';
+import { BranchMedicinePaginationDto } from './dto/branch-medicine-pagination.dto';
 
 @Controller(HUB.BRANCH_MEDICINE)
 @UseGuards(AuthHubGuard)
@@ -18,6 +20,11 @@ export class BranchMedicineController {
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.branchMedicineService.findOne(id);
+  }
+
+  @Get()
+  findAll(@Query() branchMedicinePagination?: BranchMedicinePaginationDto) {
+    return this.branchMedicineService.findAll(branchMedicinePagination);
   }
 
   @Get("branch/:branchId")

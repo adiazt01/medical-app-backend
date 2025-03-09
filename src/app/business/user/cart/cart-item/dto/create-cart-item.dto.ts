@@ -2,12 +2,10 @@ import { IsInt, IsPositive } from "class-validator";
 
 export class CreateCartItemDto {
     @IsInt()
-    medicineId: number;
+    @IsPositive()
+    branchMedicineId: number;
 
     @IsInt()
     @IsPositive()
     quantity: number = 1;
-    
-    @IsInt()
-    branchId: number;
 }

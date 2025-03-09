@@ -1,7 +1,7 @@
 export enum APP {
     USER = 'user',
-    CARTS = 'users/carts',
-    PAYMENT = 'user/payment',
+    CARTS = 'carts',
+    PAYMENT = 'payment',
 
     // Medicines and its related entities
     MEDICINES = 'medicines',

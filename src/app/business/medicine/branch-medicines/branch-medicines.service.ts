@@ -27,4 +27,16 @@ export class BranchMedicinesService {
       }
     });
   }
+
+  async findOne(id: number) {
+    return await this.prismaService.branchMedicine.findUnique({
+      where: {
+        id
+      },
+      include: {
+        branch: true,
+        medicine: true
+      }
+    });
+  }
 }

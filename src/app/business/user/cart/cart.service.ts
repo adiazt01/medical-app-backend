@@ -27,11 +27,6 @@ export class CartService {
       },
       include: {
         user: true,
-        cartItems: {
-          include: {
-            medicine: true
-          }
-        }
       }
     })
   }

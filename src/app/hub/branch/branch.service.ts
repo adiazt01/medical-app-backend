@@ -27,13 +27,54 @@ export class BranchService {
 
   async findAll(paginationDto: PaginationDto) {
     try {
-      const skip = paginationDto.skip;
-      const limit = paginationDto.limit;
+      const { limit, page, search, skip } = paginationDto;
+      
+      const where: any = {}
 
-      return await this.prismaService.branch.findMany({
+      if (search) {
+        where.OR = [
+          {
+            name: {
+              contains: search, mode: 'insensitive'
+            }
+          },
+          {
+            address: {
+              contains: search, mode: 'insensitive'
+            }
+          },
+          {
+            email: {
+              contains: search, mode: 'insensitive'
+            }
+          },
+          {
+            phone: {
+              contains: search, mode: 'insensitive'
+            }
+          }
+        ]
+      }
+
+      const total = await this.prismaService.branch.count({
+        where
+      });
+
+      const data = await this.prismaService.branch.findMany({
+        where,
         skip,
         take: limit
       });
+
+      return {
+        data,
+        meta: {
+          total,
+          limit,
+          page,
+          search
+        }
+      }
     } catch (error) {
       throw new Error(error);
     }

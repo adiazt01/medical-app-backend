@@ -21,10 +21,10 @@ export class CartItemController {
     return this.cartItemService.findAll(cartId);
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.cartItemService.findOne(id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id', ParseIntPipe) id: number) {
+  //   return this.cartItemService.findOne(id);
+  // }
 
   @Patch(':id')
   update(@Param('id', ParseIntPipe) id: number, @Body() updateCartItemDto: UpdateCartItemDto) {

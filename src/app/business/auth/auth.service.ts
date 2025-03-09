@@ -41,7 +41,12 @@ export class AuthService {
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('invalid email or password');
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    console.log(user);
+    if (user.Cart === null) {
+      throw new UnauthorizedException('User does not have a cart');
     }
 
     const token = await this.generateToken(user, user.Cart.id);

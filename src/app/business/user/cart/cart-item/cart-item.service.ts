@@ -12,10 +12,10 @@ export class CartItemService {
   ) { }
 
   async create(createCartItemDto: CreateCartItemDto, cartId: number) {
-    const { medicineId, quantity, branchId } = createCartItemDto;
+    const { branchMedicineId, quantity } = createCartItemDto;
 
-    const branchMedicine = await this.branchMedicineService.findOneMedicineByBranchId(branchId, medicineId);
-
+    const branchMedicine = await this.branchMedicineService.findOne(branchMedicineId);
+    console.log(branchMedicine);
     if (!branchMedicine) {
       throw new NotFoundException('Medicine not found or not available in this branch');
     }
@@ -32,9 +32,9 @@ export class CartItemService {
             id: cartId
           }
         },
-        medicine: {
+        branchMedicine: {
           connect: {
-            id: medicineId
+            id: branchMedicineId
           }
         }
       }
@@ -44,29 +44,54 @@ export class CartItemService {
   }
 
   async findAll(cartId: number) {
-    return await this.prismaService.cartItem.findMany({
+    const cartItems = await this.prismaService.cartItem.findMany({
       where: {
         cart: {
           id: cartId
         }
       },
       include: {
-        medicine: true,
-      }
+        branchMedicine: {
+          include: {
+            medicine: {
+              include: {
+                file: true,
+                laboratory: true
+              },
+            },
+            branch: true
+          }
+        }
+      },
     });
+
+    let total = 0;
+    if (cartItems?.length !== 0) {
+      console.log(cartItems);
+      total = cartItems.reduce((acc, item) => {
+        return acc + item.quantity * item.branchMedicine.medicine.price;
+      }, 0);
+    }
+  
+    return {
+      data: cartItems,
+      meta: {
+        total: total
+      }
+    };
   }
 
-  async findOne(id: number) {
-    return await this.prismaService.cartItem.findUnique({
-      where: {
-        id: id
-      },
-      include: {
-        medicine: true,
-        cart: true
-      }
-    });
-  }
+  // async findOne(id: number) {
+  //   return await this.prismaService.cartItem.findUnique({
+  //     where: {
+  //       id: id
+  //     },
+  //     include: {
+  //       medicine: true,
+  //       cart: true
+  //     }
+  //   });
+  // }
 
   async update(id: number, updateCartItemDto: UpdateCartItemDto) {
     return await this.prismaService.cartItem.update({

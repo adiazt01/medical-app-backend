@@ -1,16 +1,6 @@
 enum PaymentMethod {
     CASH
-    CREDIT_CARD
-    DEBIT_CARD
-    BANK_TRANSFER
-    PAYPAL
-}
-
-enum PaymentStatus {
-    PENDING
-    PAID
-    FAILED
-    REFUNDED
+    PAYMENT_MOBILE
 }
 
 enum OrderStatus {
@@ -36,8 +26,8 @@ model CartItem {
     cartId    Int
     cart      Cart     @relation(fields: [cartId], references: [id])
 
-    medicineId Int
-    medicine   Medicine @relation(fields: [medicineId], references: [id])
+    branchMedicineId Int
+    branchMedicine   BranchMedicine @relation(fields: [branchMedicineId], references: [id])
 
     quantity   Int
 
@@ -67,23 +57,23 @@ model OrderItem {
     billing   Billing[]
 }
 
-model Payment {
-    id            Int      @id @default(autoincrement())
-    amount        Float
-    method        PaymentMethod
-    status        PaymentStatus
-    transactionId String   @unique
-    createdAt     DateTime @default(now())
-    updatedAt     DateTime @updatedAt
-    billing       Billing[]
-}
-
 model Billing {
     id        Int      @id @default(autoincrement())
     userId    Int
     user      User     @relation(fields: [userId], references: [id])
     orderItems OrderItem[]
     payments   Payment[]
+    isPaid     Boolean
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
+}
+
+model Payment {
+    id            Int      @id @default(autoincrement())
+    amount        Float
+    method        PaymentMethod
+    transactionId String   @unique @default(cuid())
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+    billing       Billing[]
 }
