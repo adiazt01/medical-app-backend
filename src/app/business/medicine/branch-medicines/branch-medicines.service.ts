@@ -27,6 +27,20 @@ export class BranchMedicinesService {
       }
     });
   }
+  
+  async findOneByMedicineId(medicineId: number) {
+    return await this.prismaService.branchMedicine.findMany({
+      where: {
+        medicine: {
+          id: medicineId
+        }
+      },
+      include: {
+        branch: true,
+        medicine: true
+      }
+    });
+  }
 
   async findOne(id: number) {
     return await this.prismaService.branchMedicine.findUnique({
