@@ -1,1 +1,3 @@
-export class CreateBranchMedicineDto {}
+export class CreateBranchMedicineDto {
+    
+}

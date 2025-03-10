@@ -43,6 +43,8 @@ model Order {
     status    OrderStatus
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    Billing Billing[]
 }
 
 model OrderItem {
@@ -54,16 +56,16 @@ model OrderItem {
     quantity   Int
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
-    billing   Billing[]
 }
 
 model Billing {
     id        Int      @id @default(autoincrement())
     userId    Int
     user      User     @relation(fields: [userId], references: [id])
-    orderItems OrderItem[]
-    payments   Payment[]
-    isPaid     Boolean
+    paymentId  Int
+    payment    Payment @relation(fields: [paymentId], references: [id])
+    orderId   Int
+    order     Order    @relation(fields: [orderId], references: [id])
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
 }
@@ -75,5 +77,6 @@ model Payment {
     transactionId String   @unique @default(cuid())
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
-    billing       Billing[]
+
+    Billing Billing[]
 }

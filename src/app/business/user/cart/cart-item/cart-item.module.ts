@@ -11,5 +11,6 @@ import { InvalidTokenService } from 'src/app/business/auth/invalid-token.service
   imports: [DatabaseModule],
   controllers: [CartItemController],
   providers: [CartItemService, CartService, MedicineService, BranchMedicinesService, InvalidTokenService],
+  exports: [CartItemService],
 })
 export class CartItemModule {}

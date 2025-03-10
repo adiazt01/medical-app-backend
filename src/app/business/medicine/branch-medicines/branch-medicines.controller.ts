@@ -7,9 +7,4 @@ import { APP } from '@/common/constants/prefix/app.prefix';
 @Controller(APP.BRANCH_MEDICINES)
 export class BranchMedicinesController {
   constructor(private readonly branchMedicinesService: BranchMedicinesService) {}
-
-  // @Get()
-  // findAll() {
-  //   return this.branchMedicinesService.findAll();
-  // }
 }

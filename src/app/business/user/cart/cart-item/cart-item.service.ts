@@ -72,7 +72,7 @@ export class CartItemService {
         return acc + item.quantity * item.branchMedicine.medicine.price;
       }, 0);
     }
-  
+
     return {
       data: cartItems,
       meta: {
@@ -108,5 +108,30 @@ export class CartItemService {
         id: id
       }
     });
+  }
+
+  async removeAll(cartId: number) {
+    return await this.prismaService.cartItem.deleteMany({
+      where: {
+        cart: {
+          id: cartId
+        }
+      }
+    });
+  }
+
+  async validateAndUpdateStock(cartItems: any[]) {
+    for (const cartItem of cartItems) {
+      const hasStock = cartItem.branchMedicine.quantity >= cartItem.quantity;
+
+      console.log(cartItem.branchMedicine.quantity, cartItem.quantity);
+
+      if (!hasStock) {
+        await this.update(cartItem.id, {
+          quantity: cartItem.branchMedicine.quantity,
+        });
+        throw new NotFoundException('Stock is not enough');
+      }
+    }
   }
 }

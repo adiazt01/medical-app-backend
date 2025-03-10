@@ -19,6 +19,6 @@ import { InvalidTokenService } from './invalid-token.service';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, CartService, InvalidTokenService],
-  exports: [InvalidTokenService],
+  exports: [InvalidTokenService, AuthService],
 })
 export class AuthModule {}

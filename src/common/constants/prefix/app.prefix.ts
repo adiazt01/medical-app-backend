@@ -1,8 +1,10 @@
 export enum APP {
     USER = 'user',
     CARTS = 'carts',
-    PAYMENT = 'payment',
-
+    PAYMENTS = 'payments',
+    ORDERS = 'orders',
+    BILLINGS = 'billings',
+    
     // Medicines and its related entities
     MEDICINES = 'medicines',
     THERAPEUTIC_ACTION = 'therapeutic-actions',
